@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1960" height="2048" viewBox="0 0 1960 2048">
+    <defs>
+        <style>
+            .title { font: 16px sans-serif; fill: #111; }
+            .label { font: 13px sans-serif; fill: #111; }
+            .hint  { font: 12px sans-serif; fill: #444; }
+            .frame { fill: #fff; stroke: #111; stroke-width: 2; }
+            .bar   { fill: #f2f2f2; stroke: #111; stroke-width: 1; }
+            .card  { fill: #fafafa; stroke: #111; stroke-width: 1; rx: 12; ry: 12; }
+            .chip  { fill: #fff; stroke: #111; stroke-width: 1; rx: 12; ry: 12; }
+            .btn   { fill: #fff; stroke: #111; stroke-width: 2; rx: 12; ry: 12; }
+            .ghost { fill: #fff; stroke: #777; stroke-width: 1; rx: 12; ry: 12; }
+            .line  { stroke: #777; stroke-width: 1; }
+        </style>
+    </defs>
+
+    <!-- Layout constants -->
+    <!-- Screen size: 390x844. Margins/gaps: X=80, Y=120 -->
+    <!-- Row1 y=80, Row2 y=1044 -->
+
+    <!-- Helper: draw a phone frame with header + tab bar -->
+    <!-- SCREEN 1: TodayScreen -->
+    <g id="TodayScreen" transform="translate(80,80)">
+        <text class="title" x="0" y="-18">TodayScreen（PDCA）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <!-- Header -->
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <text class="label" x="16" y="34">今日</text>
+        <rect class="ghost" x="338" y="14" width="38" height="28" rx="10" ry="10"/>
+        <text class="hint" x="347" y="33">⚙</text>
+
+        <!-- Content -->
+        <rect class="card" x="16" y="72" width="358" height="170"/>
+        <text class="label" x="28" y="98">TodayMissionCard（Plan）</text>
+        <rect class="chip" x="28" y="112" width="110" height="26"/>
+        <text class="hint" x="36" y="130">韻キー</text>
+        <rect class="chip" x="146" y="112" width="90" height="26"/>
+        <text class="hint" x="154" y="130">モーラ</text>
+        <rect class="chip" x="242" y="112" width="132" height="26"/>
+        <text class="hint" x="250" y="130">厳密度</text>
+        <rect class="ghost" x="28" y="148" width="230" height="18"/>
+        <text class="hint" x="28" y="182">StrictnessSlider（ゆる↔ガチ）</text>
+        <rect class="btn" x="268" y="156" width="106" height="44"/>
+        <text class="label" x="298" y="184">開始</text>
+
+        <rect class="card" x="16" y="256" width="358" height="82"/>
+        <text class="label" x="28" y="284">ProgressMiniPanel（Do進捗）</text>
+        <text class="hint" x="28" y="310">達成数 6/10 ・残り 01:20</text>
+
+        <rect class="card" x="16" y="352" width="358" height="120"/>
+        <text class="label" x="28" y="380">RecentSavedPreviewList（直近保存）</text>
+        <line class="line" x1="28" y1="396" x2="374" y2="396"/>
+        <text class="hint" x="28" y="420">RhymeCardRowMini</text>
+        <text class="hint" x="28" y="444">RhymeCardRowMini</text>
+        <text class="hint" x="28" y="468">RhymeCardRowMini</text>
+
+        <rect class="card" x="16" y="486" width="358" height="178"/>
+        <text class="label" x="28" y="514">ResultSummaryCard（Check）</text>
+        <rect class="chip" x="28" y="528" width="95" height="26"/><text class="hint" x="36" y="546">一致度</text>
+        <rect class="chip" x="130" y="528" width="95" height="26"/><text class="hint" x="138" y="546">密度</text>
+        <rect class="chip" x="232" y="528" width="95" height="26"/><text class="hint" x="240" y="546">新規率</text>
+        <text class="hint" x="28" y="582">ReflectionInput（1行×2）</text>
+        <rect class="ghost" x="28" y="592" width="346" height="28"/><text class="hint" x="36" y="611">良かった：</text>
+        <rect class="ghost" x="28" y="628" width="346" height="28"/><text class="hint" x="36" y="647">次は：</text>
+
+        <rect class="card" x="16" y="676" width="358" height="96"/>
+        <text class="label" x="28" y="704">NextMissionSuggestionCard（Act）</text>
+        <text class="hint" x="28" y="728">次：モーラ短めで精度重視</text>
+        <rect class="btn" x="236" y="732" width="138" height="32"/>
+        <text class="hint" x="246" y="754">次のミッションにする</text>
+
+        <!-- Tab bar -->
+        <rect class="bar" x="0" y="772" width="390" height="72" rx="24" ry="24"/>
+        <text class="label" x="60" y="816">今日</text>
+        <text class="hint" x="170" y="816">練習</text>
+        <text class="hint" x="280" y="816">デッキ</text>
+    </g>
+
+    <!-- SCREEN 2: PracticeHomeScreen -->
+    <g id="PracticeHomeScreen" transform="translate(550,80)">
+        <text class="title" x="0" y="-18">PracticeHomeScreen（モード選択）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <text class="label" x="16" y="34">練習</text>
+
+        <rect class="card" x="16" y="72" width="358" height="72"/>
+        <text class="label" x="28" y="102">MissionQuickConfigRow（表示のみでもOK）</text>
+        <text class="hint" x="28" y="126">韻キー / モーラ / 厳密度</text>
+
+        <rect class="card" x="16" y="160" width="358" height="120"/>
+        <text class="label" x="28" y="190">PracticeModeCard：タイムアタック</text>
+        <text class="hint" x="28" y="216">目標数まで韻カードを保存</text>
+        <rect class="btn" x="260" y="224" width="114" height="40"/>
+        <text class="label" x="290" y="250">選択</text>
+
+        <rect class="card" x="16" y="296" width="358" height="120"/>
+        <text class="label" x="28" y="326">PracticeModeCard：行末固定</text>
+        <text class="hint" x="28" y="352">行末候補→1行作る→保存</text>
+        <rect class="btn" x="260" y="360" width="114" height="40"/>
+        <text class="label" x="290" y="386">選択</text>
+
+        <rect class="bar" x="0" y="772" width="390" height="72" rx="24" ry="24"/>
+        <text class="hint" x="60" y="816">今日</text>
+        <text class="label" x="170" y="816">練習</text>
+        <text class="hint" x="280" y="816">デッキ</text>
+    </g>
+
+    <!-- SCREEN 3: PracticeSessionScreen -->
+    <g id="PracticeSessionScreen" transform="translate(1020,80)">
+        <text class="title" x="0" y="-18">PracticeSessionScreen（実行）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <rect class="ghost" x="16" y="14" width="38" height="28" rx="10" ry="10"/>
+        <text class="hint" x="24" y="33">←</text>
+        <text class="label" x="70" y="34">練習</text>
+        <rect class="ghost" x="324" y="14" width="50" height="28" rx="10" ry="10"/>
+        <text class="hint" x="332" y="33">終了</text>
+
+        <rect class="card" x="16" y="72" width="358" height="64"/>
+        <text class="label" x="28" y="98">MissionBanner</text>
+        <text class="hint" x="28" y="120">韻キー / モーラ / 厳密度 / 目標</text>
+
+        <rect class="card" x="16" y="144" width="358" height="36"/>
+        <text class="hint" x="28" y="168">TimerBar（タイムアタック時）</text>
+
+        <rect class="card" x="16" y="192" width="358" height="98"/>
+        <text class="label" x="28" y="220">InputArea（WordInput / LineInput）</text>
+        <rect class="ghost" x="28" y="232" width="346" height="40"/>
+        <text class="hint" x="36" y="258">入力…</text>
+
+        <rect class="card" x="16" y="304" width="358" height="360"/>
+        <text class="label" x="28" y="332">CandidateList</text>
+        <line class="line" x1="28" y1="346" x2="374" y2="346"/>
+        <text class="hint" x="28" y="370">CandidateRow（単語/読み/モーラ/一致度）</text>
+        <text class="hint" x="28" y="396">CandidateRow</text>
+        <text class="hint" x="28" y="422">CandidateRow</text>
+        <text class="hint" x="28" y="448">…</text>
+
+        <rect class="card" x="16" y="676" width="358" height="84"/>
+        <text class="label" x="28" y="704">ActionBar</text>
+        <rect class="btn" x="28" y="714" width="120" height="36"/><text class="hint" x="70" y="738">保存</text>
+        <rect class="ghost" x="156" y="714" width="110" height="36"/><text class="hint" x="178" y="738">次の候補</text>
+        <rect class="ghost" x="274" y="714" width="100" height="36"/><text class="hint" x="304" y="738">やり直し</text>
+
+        <rect class="bar" x="0" y="772" width="390" height="72" rx="24" ry="24"/>
+        <text class="hint" x="60" y="816">今日</text>
+        <text class="label" x="170" y="816">練習</text>
+        <text class="hint" x="280" y="816">デッキ</text>
+    </g>
+
+    <!-- SCREEN 4: PracticeResultScreen -->
+    <g id="PracticeResultScreen" transform="translate(1490,80)">
+        <text class="title" x="0" y="-18">PracticeResultScreen（結果）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <rect class="ghost" x="16" y="14" width="38" height="28" rx="10" ry="10"/>
+        <text class="hint" x="24" y="33">←</text>
+        <text class="label" x="70" y="34">結果</text>
+
+        <rect class="card" x="16" y="72" width="358" height="120"/>
+        <text class="label" x="28" y="100">ScoreSummaryPanel</text>
+        <rect class="chip" x="28" y="112" width="100" height="28"/><text class="hint" x="38" y="131">一致度</text>
+        <rect class="chip" x="136" y="112" width="100" height="28"/><text class="hint" x="146" y="131">密度</text>
+        <rect class="chip" x="244" y="112" width="100" height="28"/><text class="hint" x="254" y="131">新規率</text>
+        <text class="hint" x="28" y="170">スコア説明（任意）</text>
+
+        <rect class="card" x="16" y="206" width="358" height="130"/>
+        <text class="label" x="28" y="234">ReflectionForm（1行×2）</text>
+        <rect class="ghost" x="28" y="246" width="346" height="32"/><text class="hint" x="36" y="268">良かった：</text>
+        <rect class="ghost" x="28" y="286" width="346" height="32"/><text class="hint" x="36" y="308">次は：</text>
+
+        <rect class="card" x="16" y="350" width="358" height="220"/>
+        <text class="label" x="28" y="378">SavedCardsPreviewList</text>
+        <line class="line" x1="28" y1="392" x2="374" y2="392"/>
+        <text class="hint" x="28" y="418">RhymeCardRowMini</text>
+        <text class="hint" x="28" y="444">RhymeCardRowMini</text>
+        <text class="hint" x="28" y="470">RhymeCardRowMini</text>
+        <rect class="ghost" x="260" y="512" width="114" height="34"/>
+        <text class="hint" x="288" y="534">もっと見る</text>
+
+        <rect class="card" x="16" y="584" width="358" height="120"/>
+        <text class="label" x="28" y="612">ResultActionButtons</text>
+        <rect class="btn" x="28" y="626" width="110" height="40"/><text class="hint" x="44" y="652">デッキを見る</text>
+        <rect class="btn" x="144" y="626" width="128" height="40"/><text class="hint" x="154" y="652">次のミッション</text>
+        <rect class="ghost" x="278" y="626" width="96" height="40"/><text class="hint" x="304" y="652">もう一回</text>
+
+        <rect class="bar" x="0" y="772" width="390" height="72" rx="24" ry="24"/>
+        <text class="hint" x="60" y="816">今日</text>
+        <text class="label" x="170" y="816">練習</text>
+        <text class="hint" x="280" y="816">デッキ</text>
+    </g>
+
+    <!-- ROW 2 -->
+    <!-- SCREEN 5: DeckScreen -->
+    <g id="DeckScreen" transform="translate(80,1044)">
+        <text class="title" x="0" y="-18">DeckScreen（韻ネタ帳）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <text class="label" x="16" y="34">デッキ</text>
+
+        <rect class="ghost" x="16" y="72" width="358" height="42"/>
+        <text class="hint" x="28" y="98">SearchBar（単語/読み/メモ/タグ）</text>
+
+        <rect class="card" x="16" y="122" width="358" height="56"/>
+        <text class="label" x="28" y="148">FilterRow</text>
+        <rect class="chip" x="28" y="156" width="70" height="22"/><text class="hint" x="38" y="172">状態</text>
+        <rect class="chip" x="104" y="156" width="70" height="22"/><text class="hint" x="114" y="172">モーラ</text>
+        <rect class="chip" x="180" y="156" width="70" height="22"/><text class="hint" x="190" y="172">韻キー</text>
+        <rect class="chip" x="256" y="156" width="70" height="22"/><text class="hint" x="266" y="172">タグ</text>
+
+        <rect class="card" x="16" y="190" width="358" height="520"/>
+        <text class="label" x="28" y="218">RhymeCardList</text>
+        <line class="line" x1="28" y1="232" x2="374" y2="232"/>
+        <text class="hint" x="28" y="258">RhymeCardRow（text / reading / mora / tags / status）</text>
+        <text class="hint" x="28" y="284">RhymeCardRow</text>
+        <text class="hint" x="28" y="310">RhymeCardRow</text>
+        <text class="hint" x="28" y="336">…</text>
+
+        <!-- FAB -->
+        <rect class="btn" x="318" y="720" width="56" height="56" rx="20" ry="20"/>
+        <text class="label" x="338" y="754">＋</text>
+
+        <rect class="bar" x="0" y="772" width="390" height="72" rx="24" ry="24"/>
+        <text class="hint" x="60" y="816">今日</text>
+        <text class="hint" x="170" y="816">練習</text>
+        <text class="label" x="280" y="816">デッキ</text>
+    </g>
+
+    <!-- SCREEN 6: RhymeCardDetailScreen -->
+    <g id="RhymeCardDetailScreen" transform="translate(550,1044)">
+        <text class="title" x="0" y="-18">RhymeCardDetailScreen（カード詳細）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <rect class="ghost" x="16" y="14" width="38" height="28" rx="10" ry="10"/>
+        <text class="hint" x="24" y="33">←</text>
+        <text class="label" x="70" y="34">カード詳細</text>
+
+        <rect class="card" x="16" y="72" width="358" height="120"/>
+        <text class="label" x="28" y="100">RhymeCardHeader</text>
+        <text class="hint" x="28" y="124">text / reading</text>
+        <text class="hint" x="28" y="146">moraCount / rhymeKey</text>
+
+        <rect class="card" x="16" y="206" width="358" height="86"/>
+        <text class="label" x="28" y="234">TagEditorRow</text>
+        <rect class="chip" x="28" y="246" width="64" height="24"/><text class="hint" x="38" y="263">街</text>
+        <rect class="chip" x="98" y="246" width="64" height="24"/><text class="hint" x="108" y="263">金</text>
+        <rect class="ghost" x="168" y="246" width="80" height="24"/><text class="hint" x="178" y="263">+タグ</text>
+
+        <rect class="card" x="16" y="306" width="358" height="76"/>
+        <text class="label" x="28" y="334">StatusToggle</text>
+        <rect class="chip" x="28" y="342" width="70" height="24"/><text class="hint" x="36" y="359">温存</text>
+        <rect class="chip" x="104" y="342" width="86" height="24"/><text class="hint" x="112" y="359">使用済み</text>
+        <rect class="chip" x="196" y="342" width="70" height="24"/><text class="hint" x="206" y="359">ボツ</text>
+
+        <rect class="card" x="16" y="396" width="358" height="140"/>
+        <text class="label" x="28" y="424">MemoField</text>
+        <rect class="ghost" x="28" y="436" width="346" height="86"/>
+        <text class="hint" x="36" y="462">メモ…</text>
+
+        <rect class="card" x="16" y="550" width="358" height="70"/>
+        <text class="label" x="28" y="578">DeckAssignRow</text>
+        <text class="hint" x="28" y="602">所属デッキの付け替え</text>
+
+        <rect class="card" x="16" y="634" width="358" height="110"/>
+        <text class="label" x="28" y="662">QuickActions</text>
+        <rect class="btn" x="28" y="676" width="170" height="44"/>
+        <text class="hint" x="42" y="704">この韻キーで練習</text>
+        <rect class="ghost" x="206" y="676" width="168" height="44"/>
+        <text class="hint" x="268" y="704">コピー</text>
+    </g>
+
+    <!-- SCREEN 7: AddRhymeCardModal -->
+    <g id="AddRhymeCardModal" transform="translate(1020,1044)">
+        <text class="title" x="0" y="-18">AddRhymeCardModal（追加）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <text class="label" x="16" y="34">デッキ</text>
+
+        <!-- Dim background -->
+        <rect x="0" y="56" width="390" height="788" fill="#000" opacity="0.06"/>
+
+        <!-- Modal -->
+        <rect class="card" x="16" y="120" width="358" height="560" rx="18" ry="18"/>
+        <text class="label" x="28" y="150">AddRhymeCard（Modal）</text>
+
+        <text class="hint" x="28" y="178">TextInput（単語/短フレーズ）</text>
+        <rect class="ghost" x="28" y="190" width="346" height="44"/>
+        <text class="hint" x="36" y="218">入力…</text>
+
+        <rect class="card" x="28" y="248" width="346" height="140" rx="14" ry="14"/>
+        <text class="label" x="40" y="276">AutoAnalysisPreview</text>
+        <text class="hint" x="40" y="302">reading：</text>
+        <text class="hint" x="40" y="326">moraCount：</text>
+        <text class="hint" x="40" y="350">rhymeKey：</text>
+
+        <rect class="card" x="28" y="402" width="346" height="110" rx="14" ry="14"/>
+        <text class="label" x="40" y="430">TagPicker（任意）</text>
+        <rect class="ghost" x="40" y="446" width="90" height="24"/><text class="hint" x="50" y="463">+タグ</text>
+
+        <rect class="btn" x="28" y="528" width="346" height="48"/>
+        <text class="label" x="186" y="558" text-anchor="middle">保存</text>
+
+        <rect class="ghost" x="28" y="586" width="346" height="38"/>
+        <text class="hint" x="186" y="610" text-anchor="middle">キャンセル</text>
+    </g>
+
+    <!-- SCREEN 8: SettingsScreen -->
+    <g id="SettingsScreen" transform="translate(1490,1044)">
+        <text class="title" x="0" y="-18">SettingsScreen（設定）</text>
+        <rect class="frame" x="0" y="0" width="390" height="844" rx="24" ry="24"/>
+
+        <rect class="bar" x="0" y="0" width="390" height="56" rx="24" ry="24"/>
+        <rect class="ghost" x="16" y="14" width="38" height="28" rx="10" ry="10"/>
+        <text class="hint" x="24" y="33">←</text>
+        <text class="label" x="70" y="34">設定</text>
+
+        <rect class="card" x="16" y="72" width="358" height="310"/>
+        <text class="label" x="28" y="100">ToggleList（ゆる踏み設定）</text>
+        <line class="line" x1="28" y1="116" x2="374" y2="116"/>
+        <text class="hint" x="28" y="142">長音「ー」を同一扱い</text>
+        <rect class="ghost" x="314" y="126" width="60" height="22"/><text class="hint" x="330" y="142">ON</text>
+
+        <text class="hint" x="28" y="182">促音「っ」を同一扱い</text>
+        <rect class="ghost" x="314" y="166" width="60" height="22"/><text class="hint" x="330" y="182">ON</text>
+
+        <text class="hint" x="28" y="222">「ん」の扱い</text>
+        <rect class="ghost" x="314" y="206" width="60" height="22"/><text class="hint" x="330" y="222">OFF</text>
+
+        <text class="hint" x="28" y="262">濁音を近似OK</text>
+        <rect class="ghost" x="314" y="246" width="60" height="22"/><text class="hint" x="330" y="262">ON</text>
+
+        <rect class="card" x="16" y="396" width="358" height="120"/>
+        <text class="label" x="28" y="424">データ</text>
+        <rect class="ghost" x="28" y="438" width="346" height="44"/>
+        <text class="hint" x="186" y="466" text-anchor="middle">エクスポート（任意）</text>
+    </g>
+</svg>

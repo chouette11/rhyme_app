@@ -1,0 +1,1 @@
+enum PracticeMode { timeAttack, lineEndLock }
