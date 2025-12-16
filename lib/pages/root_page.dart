@@ -81,9 +81,15 @@ final _router = GoRouter(
     GoRoute(
       path: '/card/:cardId',
       name: AppRoute.cardDetail,
-      builder: (context, state) => CardDetailScreen(
-        cardId: state.pathParameters['cardId']!,
-      ),
+      builder: (context, state) {
+        final cardId = state.pathParameters['cardId'];
+        if (cardId == null) {
+          return const Scaffold(
+            body: Center(child: Text('Error: cardId is missing from the route.')),
+          );
+        }
+        return CardDetailScreen(cardId: cardId);
+      },
     ),
   ],
 );
