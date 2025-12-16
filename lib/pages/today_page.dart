@@ -113,25 +113,25 @@ class TodayScreen extends ConsumerWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Glass(
-                radius: 20,
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('直近の保存', style: Theme.of(context).textTheme.titleSmall),
-                    const SizedBox(height: 10),
-                    if (s.recentSaved.isEmpty)
-                      Text('まだ保存がありません',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.65)))
-                    else
-                      ...s.recentSaved.map((c) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: MiniSavedRow(card: c),
-                          )),
-                  ],
-                ),
+            child: Glass(
+              radius: 20,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('直近の保存', style: Theme.of(context).textTheme.titleSmall),
+                  const SizedBox(height: 10),
+                  if (s.recentSaved.isEmpty)
+                    Text('まだ保存がありません',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.65)))
+                  else
+                    ...s.recentSaved.map((c) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: MiniSavedRow(card: c),
+                        )),
+                ],
               ),
+            ),
           ),
 
           const SizedBox(height: 12),
