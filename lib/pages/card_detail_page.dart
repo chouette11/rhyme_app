@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
@@ -8,28 +10,34 @@ import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 import 'package:rhyme_app/pages/practice/practice_session_page.dart';
 
-class CardDetailScreen extends StatefulWidget {
+class CardDetailScreen extends ConsumerStatefulWidget {
   final String cardId;
   const CardDetailScreen({super.key, required this.cardId});
 
   @override
-  State<CardDetailScreen> createState() => _CardDetailScreenState();
+  ConsumerState<CardDetailScreen> createState() => _CardDetailScreenState();
 }
 
-class _CardDetailScreenState extends State<CardDetailScreen> {
+class _CardDetailScreenState extends ConsumerState<CardDetailScreen> {
   late TextEditingController memoCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    memoCtrl = TextEditingController();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final s = AppScope.of(context);
+    final s = ref.read(appStateProvider);
     final card = s.deck.firstWhere((e) => e.id == widget.cardId);
-    memoCtrl = TextEditingController(text: card.memo);
+    memoCtrl.text = card.memo;
   }
 
   @override
   Widget build(BuildContext context) {
-    final s = AppScope.of(context);
+    final s = ref.watch(appStateProvider);
     final card = s.deck.firstWhere((e) => e.id == widget.cardId);
 
     return Scaffold(
@@ -83,15 +91,15 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                   Wrap(spacing: 8, children: [
                     _statusPill(context, '温存', card.status == CardStatus.stock, () {
                       card.status = CardStatus.stock;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     }),
                     _statusPill(context, '使用済み', card.status == CardStatus.used, () {
                       card.status = CardStatus.used;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     }),
                     _statusPill(context, 'ボツ', card.status == CardStatus.trash, () {
                       card.status = CardStatus.trash;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     }),
                   ]),
                 ]),
@@ -112,7 +120,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                     controller: memoCtrl,
                     onChanged: (v) {
                       card.memo = v;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     },
                     maxLines: 4,
                     decoration: InputDecoration(

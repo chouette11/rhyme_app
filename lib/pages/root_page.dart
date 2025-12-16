@@ -4,14 +4,8 @@ import 'package:rhyme_app/pages/deck_page.dart';
 import 'package:rhyme_app/pages/practice/practice_home_page.dart';
 import 'package:rhyme_app/pages/today_page.dart';
 
-class RhymeApp extends StatefulWidget {
+class RhymeApp extends StatelessWidget {
   const RhymeApp({super.key});
-  @override
-  State<RhymeApp> createState() => _RhymeAppState();
-}
-
-class _RhymeAppState extends State<RhymeApp> {
-  final AppState state = AppState();
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +18,22 @@ class _RhymeAppState extends State<RhymeApp> {
       surface: const Color(0xFF0B1024),
     );
 
-    return AppScope(
-      state: state,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: colorScheme,
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: const Color(0xFF070A12),
-          textTheme: const TextTheme(
-            titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-            titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-            titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-            bodyMedium: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-            bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-          ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: colorScheme,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF070A12),
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          bodyMedium: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
-        home: const RootTabs(),
       ),
+      home: const RootTabs(),
     );
   }
 }

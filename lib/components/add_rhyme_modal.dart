@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/models/rhyme_card.dart';
 
-class AddRhymeModal extends StatefulWidget {
+class AddRhymeModal extends ConsumerStatefulWidget {
   const AddRhymeModal({super.key});
 
   @override
-  State<AddRhymeModal> createState() => _AddRhymeModalState();
+  ConsumerState<AddRhymeModal> createState() => _AddRhymeModalState();
 }
 
-class _AddRhymeModalState extends State<AddRhymeModal> {
+class _AddRhymeModalState extends ConsumerState<AddRhymeModal> {
   final textCtrl = TextEditingController();
   final List<String> tags = ['街'];
 
@@ -71,11 +73,10 @@ class _AddRhymeModalState extends State<AddRhymeModal> {
           AccentGradientButton(
             text: '保存する',
             onPressed: () {
-              final s = AppScope.of(context);
               final txt = textCtrl.text.trim();
               if (txt.isEmpty) return;
 
-              s.saveToDeck(RhymeCard(
+              ref.read(appStateProvider).saveToDeck(RhymeCard(
                 id: 'manual_${DateTime.now().microsecondsSinceEpoch}',
                 text: txt,
                 reading: reading,

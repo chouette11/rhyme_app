@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
@@ -9,15 +11,15 @@ import 'package:rhyme_app/models/practice_result.dart';
 import 'package:rhyme_app/models/rhyme_card.dart';
 import 'package:rhyme_app/pages/practice/practice_result_page.dart';
 
-class PracticeSessionScreen extends StatefulWidget {
+class PracticeSessionScreen extends ConsumerStatefulWidget {
   final Mission mission;
   const PracticeSessionScreen({super.key, required this.mission});
 
   @override
-  State<PracticeSessionScreen> createState() => _PracticeSessionScreenState();
+  ConsumerState<PracticeSessionScreen> createState() => _PracticeSessionScreenState();
 }
 
-class _PracticeSessionScreenState extends State<PracticeSessionScreen> {
+class _PracticeSessionScreenState extends ConsumerState<PracticeSessionScreen> {
   final TextEditingController ctrl = TextEditingController();
   final List<RhymeCard> saved = [];
   int secondsLeft = 80; // ダミー
@@ -38,7 +40,6 @@ class _PracticeSessionScreenState extends State<PracticeSessionScreen> {
   }
 
   void _saveCandidate(RhymeCard c) {
-    final s = AppScope.of(context);
     final card = RhymeCard(
       id: 'saved_${DateTime.now().microsecondsSinceEpoch}',
       text: c.text,
@@ -47,7 +48,7 @@ class _PracticeSessionScreenState extends State<PracticeSessionScreen> {
       rhymeKey: c.rhymeKey,
       tags: c.tags,
     );
-    s.saveToDeck(card);
+    ref.read(appStateProvider).saveToDeck(card);
     setState(() {
       saved.insert(0, card);
     });
