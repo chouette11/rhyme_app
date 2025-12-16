@@ -23,7 +23,7 @@ final _router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/today',
+              path: '/${AppRoute.today}',
               name: AppRoute.today,
               builder: (context, state) => const TodayScreen(),
             ),
@@ -32,12 +32,12 @@ final _router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/practice',
+              path: '/${AppRoute.practice}',
               name: AppRoute.practice,
               builder: (context, state) => const PracticeHomeScreen(),
               routes: [
                 GoRoute(
-                  path: 'session',
+                  path: AppRoute.practiceSession,
                   name: AppRoute.practiceSession,
                   builder: (context, state) {
                     final extra = state.extra;
@@ -52,7 +52,7 @@ final _router = GoRouter(
                   },
                 ),
                 GoRoute(
-                  path: 'result',
+                  path: AppRoute.practiceResult,
                   name: AppRoute.practiceResult,
                   builder: (context, state) {
                     final extra = state.extra;
@@ -75,7 +75,7 @@ final _router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/deck',
+              path: '/${AppRoute.deck}',
               name: AppRoute.deck,
               builder: (context, state) => const DeckScreen(),
             ),
@@ -84,7 +84,7 @@ final _router = GoRouter(
       ],
     ),
     GoRoute(
-      path: '/settings',
+      path: '/${AppRoute.settings}',
       name: AppRoute.settings,
       builder: (context, state) => const SettingsScreen(),
     ),
@@ -100,20 +100,6 @@ final _router = GoRouter(
         }
         return CardDetailScreen(cardId: cardId);
       },
-    ),
-    GoRoute(
-      path: '/practice-session',
-      name: AppRoute.practiceSession,
-      builder: (context, state) => PracticeSessionScreen(
-        mission: state.extra! as Mission,
-      ),
-    ),
-    GoRoute(
-      path: '/practice-result',
-      name: AppRoute.practiceResult,
-      builder: (context, state) => PracticeResultScreen(
-        result: state.extra! as PracticeResult,
-      ),
     ),
   ],
 );
