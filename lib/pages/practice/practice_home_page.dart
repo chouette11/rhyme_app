@@ -128,3 +128,33 @@ class PracticeHomeScreen extends ConsumerWidget {
     );
   }
 }
+
+class _ModeRow extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _ModeRow({required this.label, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(selected ? 0.10 : 0.06),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white.withOpacity(selected ? 0.20 : 0.12)),
+        ),
+        child: Row(
+          children: [
+            Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyMedium)),
+            if (selected) const Icon(Icons.check_circle, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+}

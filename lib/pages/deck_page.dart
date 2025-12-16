@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/app_state.dart';
+import 'package:rhyme_app/components/add_rhyme_modal.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
