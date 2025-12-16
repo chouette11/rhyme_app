@@ -35,22 +35,6 @@ final _router = GoRouter(
               path: '/practice',
               name: AppRoute.practice,
               builder: (context, state) => const PracticeHomeScreen(),
-              routes: [
-                GoRoute(
-                  path: 'session',
-                  name: AppRoute.practiceSession,
-                  builder: (context, state) => PracticeSessionScreen(
-                    mission: state.extra! as Mission,
-                  ),
-                ),
-                GoRoute(
-                  path: 'result',
-                  name: AppRoute.practiceResult,
-                  builder: (context, state) => PracticeResultScreen(
-                    result: state.extra! as PracticeResult,
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -75,6 +59,20 @@ final _router = GoRouter(
       name: AppRoute.cardDetail,
       builder: (context, state) => CardDetailScreen(
         cardId: state.pathParameters['cardId']!,
+      ),
+    ),
+    GoRoute(
+      path: '/practice-session',
+      name: AppRoute.practiceSession,
+      builder: (context, state) => PracticeSessionScreen(
+        mission: state.extra! as Mission,
+      ),
+    ),
+    GoRoute(
+      path: '/practice-result',
+      name: AppRoute.practiceResult,
+      builder: (context, state) => PracticeResultScreen(
+        result: state.extra! as PracticeResult,
       ),
     ),
   ],
