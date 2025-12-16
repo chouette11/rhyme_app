@@ -39,9 +39,17 @@ final _router = GoRouter(
                 GoRoute(
                   path: 'session',
                   name: AppRoute.practiceSession,
-                  builder: (context, state) => PracticeSessionScreen(
-                    mission: state.extra! as Mission,
-                  ),
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is! Mission) {
+                      return const Scaffold(
+                        body: Center(child: Text('Invalid or missing mission data')),
+                      );
+                    }
+                    return PracticeSessionScreen(
+                      mission: extra,
+                    );
+                  },
                 ),
                 GoRoute(
                   path: 'result',
