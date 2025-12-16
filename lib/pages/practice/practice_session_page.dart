@@ -65,7 +65,7 @@ class _PracticeSessionScreenState extends ConsumerState<PracticeSessionScreen> {
       saved: List.unmodifiable(saved),
     );
     if (!mounted) return;
-    context.goNamed(AppRoute.practiceResult, extra: result);
+    context.pushReplacementNamed(AppRoute.practiceResult, extra: result);
   }
 
   @override
