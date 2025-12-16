@@ -67,6 +67,12 @@ class _PracticeSessionScreenState extends ConsumerState<PracticeSessionScreen> {
   }
 
   @override
+  void dispose() {
+    ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final m = widget.mission;
     final candidates = _candidates(ctrl.text);
