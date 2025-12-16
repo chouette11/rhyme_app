@@ -12,8 +12,11 @@ import 'package:rhyme_app/pages/practice/practice_session_page.dart';
 
 // Provider to manage TextEditingController lifecycle for card memos
 final memoControllerProvider = Provider.autoDispose.family<TextEditingController, String>((ref, cardId) {
-  final s = ref.watch(appStateProvider);
-  final card = s.deck.firstWhere((e) => e.id == cardId);
+  final s = ref.read(appStateProvider);
+  final card = s.deck.firstWhere(
+    (e) => e.id == cardId,
+    orElse: () => throw StateError('Card with id $cardId not found'),
+  );
   final controller = TextEditingController(text: card.memo);
   
   // Automatically dispose the controller when the provider is disposed
@@ -31,7 +34,10 @@ class CardDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(appStateProvider);
-    final card = s.deck.firstWhere((e) => e.id == cardId);
+    final card = s.deck.firstWhere(
+      (e) => e.id == cardId,
+      orElse: () => throw StateError('Card with id $cardId not found'),
+    );
     final memoCtrl = ref.watch(memoControllerProvider(cardId));
 
     return Scaffold(
