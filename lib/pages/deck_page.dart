@@ -20,6 +20,12 @@ class _DeckScreenState extends ConsumerState<DeckScreen> {
   CardStatus? statusFilter = CardStatus.stock;
 
   @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final s = ref.watch(appStateProvider);
 
