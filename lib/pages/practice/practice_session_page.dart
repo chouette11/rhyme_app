@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
@@ -9,7 +10,7 @@ import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 import 'package:rhyme_app/models/practice_result.dart';
 import 'package:rhyme_app/models/rhyme_card.dart';
-import 'package:rhyme_app/pages/practice/practice_result_page.dart';
+import 'package:rhyme_app/routes.dart';
 
 class PracticeSessionScreen extends ConsumerStatefulWidget {
   final Mission mission;
@@ -63,7 +64,8 @@ class _PracticeSessionScreenState extends ConsumerState<PracticeSessionScreen> {
       novelty: 71,
       saved: List.unmodifiable(saved),
     );
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => PracticeResultScreen(result: result)));
+    if (!mounted) return;
+    context.goNamed(AppRoute.practiceResult, extra: result);
   }
 
   @override
@@ -76,13 +78,13 @@ class _PracticeSessionScreenState extends ConsumerState<PracticeSessionScreen> {
         child: ListView(
           padding: const EdgeInsets.only(bottom: 24),
           children: [
-            AppHeader(
-              title: m.title,
-              left: InkWell(
-                onTap: () => Navigator.pop(context),
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: 36,
+              AppHeader(
+                title: m.title,
+                left: InkWell(
+                  onTap: () => context.pop(),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 36,
                   height: 36,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.08),

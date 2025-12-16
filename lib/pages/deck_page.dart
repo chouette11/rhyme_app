@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/models/card_status.dart';
-import 'package:rhyme_app/pages/card_detail_page.dart';
-import 'package:rhyme_app/pages/setting_page.dart';
+import 'package:rhyme_app/routes.dart';
 
 class DeckScreen extends ConsumerStatefulWidget {
   const DeckScreen({super.key});
@@ -43,7 +43,7 @@ class _DeckScreenState extends ConsumerState<DeckScreen> {
               AppHeader(
                 title: 'デッキ',
                 right: InkWell(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SettingsScreen())),
+                  onTap: () => context.pushNamed(AppRoute.settings),
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
                     width: 36,
@@ -131,9 +131,10 @@ class _DeckScreenState extends ConsumerState<DeckScreen> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: RhymeCardRow(
                           card: c,
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => CardDetailScreen(cardId: c.id)));
-                          },
+                          onTap: () => context.pushNamed(
+                            AppRoute.cardDetail,
+                            pathParameters: {'cardId': c.id},
+                          ),
                         ),
                       )),
                   ]),

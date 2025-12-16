@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
@@ -8,7 +9,7 @@ import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/models/card_status.dart';
 import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
-import 'package:rhyme_app/pages/practice/practice_session_page.dart';
+import 'package:rhyme_app/routes.dart';
 
 // Provider to manage TextEditingController lifecycle for card memos
 final memoControllerProvider = Provider.autoDispose.family<TextEditingController, String>((ref, cardId) {
@@ -48,7 +49,7 @@ class CardDetailScreen extends ConsumerWidget {
             AppHeader(
               title: 'カード',
               left: InkWell(
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   width: 36,
@@ -155,24 +156,23 @@ class CardDetailScreen extends ConsumerWidget {
                     ),
                     SizedBox(
                       width: 120,
-                      child: AccentGradientButton(
-                        text: '開始',
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => PracticeSessionScreen(
-                              mission: Mission(
-                                id: 'from_card',
-                                rhymeKey: card.rhymeKey,
-                                mora: 3,
-                                targetCount: 10,
-                                mode: PracticeMode.timeAttack,
-                                approxAllowed: true,
-                              ),
-                            ),
-                          ));
-                        },
-                      ),
+                    child: AccentGradientButton(
+                      text: '開始',
+                      onPressed: () {
+                        context.pushNamed(
+                          AppRoute.practiceSession,
+                          extra: Mission(
+                            id: 'from_card',
+                            rhymeKey: card.rhymeKey,
+                            mora: 3,
+                            targetCount: 10,
+                            mode: PracticeMode.timeAttack,
+                            approxAllowed: true,
+                          ),
+                        );
+                      },
                     ),
+                  ),
                   ],
                 ),
               ),

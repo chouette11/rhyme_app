@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
-import 'package:rhyme_app/pages/practice/practice_session_page.dart';
-import 'package:rhyme_app/pages/setting_page.dart';
+import 'package:rhyme_app/routes.dart';
 
 class TodayScreen extends ConsumerWidget {
   const TodayScreen({super.key});
@@ -23,7 +23,7 @@ class TodayScreen extends ConsumerWidget {
           AppHeader(
             title: '今日',
             right: InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SettingsScreen())),
+              onTap: () => context.pushNamed(AppRoute.settings),
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 width: 36,
@@ -70,9 +70,7 @@ class TodayScreen extends ConsumerWidget {
                   AccentGradientButton(
                     text: '開始',
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => PracticeSessionScreen(mission: m),
-                      ));
+                      context.pushNamed(AppRoute.practiceSession, extra: m);
                     },
                   ),
                 ],
