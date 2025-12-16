@@ -22,6 +22,12 @@ class _AddRhymeModalState extends ConsumerState<AddRhymeModal> {
   String get rhymeKey => '-ou'; // MVP: ダミー（後で解析に置換）
 
   @override
+  void dispose() {
+    textCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
