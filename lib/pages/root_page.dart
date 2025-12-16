@@ -54,9 +54,19 @@ final _router = GoRouter(
                 GoRoute(
                   path: 'result',
                   name: AppRoute.practiceResult,
-                  builder: (context, state) => PracticeResultScreen(
-                    result: state.extra! as PracticeResult,
-                  ),
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is PracticeResult) {
+                      return PracticeResultScreen(result: extra);
+                    } else {
+                      // Fallback: show an error message or a placeholder
+                      return const Scaffold(
+                        body: Center(
+                          child: Text('Invalid or missing practice result.'),
+                        ),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
