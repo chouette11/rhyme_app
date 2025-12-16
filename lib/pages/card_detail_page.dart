@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
@@ -8,29 +10,35 @@ import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 import 'package:rhyme_app/pages/practice/practice_session_page.dart';
 
-class CardDetailScreen extends StatefulWidget {
+// Provider to manage TextEditingController lifecycle for card memos
+final memoControllerProvider = Provider.autoDispose.family<TextEditingController, String>((ref, cardId) {
+  final s = ref.read(appStateProvider);
+  final card = s.deck.firstWhere(
+    (e) => e.id == cardId,
+    orElse: () => throw StateError('Card with id $cardId not found'),
+  );
+  final controller = TextEditingController(text: card.memo);
+  
+  // Automatically dispose the controller when the provider is disposed
+  ref.onDispose(() {
+    controller.dispose();
+  });
+  
+  return controller;
+});
+
+class CardDetailScreen extends ConsumerWidget {
   final String cardId;
   const CardDetailScreen({super.key, required this.cardId});
 
   @override
-  State<CardDetailScreen> createState() => _CardDetailScreenState();
-}
-
-class _CardDetailScreenState extends State<CardDetailScreen> {
-  late TextEditingController memoCtrl;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final s = AppScope.of(context);
-    final card = s.deck.firstWhere((e) => e.id == widget.cardId);
-    memoCtrl = TextEditingController(text: card.memo);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final s = AppScope.of(context);
-    final card = s.deck.firstWhere((e) => e.id == widget.cardId);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(appStateProvider);
+    final card = s.deck.firstWhere(
+      (e) => e.id == cardId,
+      orElse: () => throw StateError('Card with id $cardId not found'),
+    );
+    final memoCtrl = ref.watch(memoControllerProvider(cardId));
 
     return Scaffold(
       body: SafeArea(
@@ -83,15 +91,15 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                   Wrap(spacing: 8, children: [
                     _statusPill(context, '温存', card.status == CardStatus.stock, () {
                       card.status = CardStatus.stock;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     }),
                     _statusPill(context, '使用済み', card.status == CardStatus.used, () {
                       card.status = CardStatus.used;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     }),
                     _statusPill(context, 'ボツ', card.status == CardStatus.trash, () {
                       card.status = CardStatus.trash;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     }),
                   ]),
                 ]),
@@ -112,7 +120,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                     controller: memoCtrl,
                     onChanged: (v) {
                       card.memo = v;
-                      s.updateCard(card);
+                      ref.read(appStateProvider).updateCard(card);
                     },
                     maxLines: 4,
                     decoration: InputDecoration(
@@ -174,8 +182,8 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       ),
     );
   }
+}
 
-  Widget _statusPill(BuildContext context, String label, bool selected, VoidCallback onTap) {
-    return InkWell(onTap: onTap, borderRadius: BorderRadius.circular(999), child: Pill(text: label, selected: selected));
-  }
+Widget _statusPill(BuildContext context, String label, bool selected, VoidCallback onTap) {
+  return InkWell(onTap: onTap, borderRadius: BorderRadius.circular(999), child: Pill(text: label, selected: selected));
 }

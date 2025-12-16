@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/models/card_status.dart';
 import 'package:rhyme_app/pages/card_detail_page.dart';
+import 'package:rhyme_app/pages/setting_page.dart';
 
-class DeckScreen extends StatefulWidget {
+class DeckScreen extends ConsumerStatefulWidget {
   const DeckScreen({super.key});
 
   @override
-  State<DeckScreen> createState() => _DeckScreenState();
+  ConsumerState<DeckScreen> createState() => _DeckScreenState();
 }
 
-class _DeckScreenState extends State<DeckScreen> {
+class _DeckScreenState extends ConsumerState<DeckScreen> {
   final TextEditingController search = TextEditingController();
   CardStatus? statusFilter = CardStatus.stock;
 
   @override
   Widget build(BuildContext context) {
-    final s = AppScope.of(context);
+    final s = ref.watch(appStateProvider);
 
     final query = search.text.trim();
     final cards = s.deck.where((c) {

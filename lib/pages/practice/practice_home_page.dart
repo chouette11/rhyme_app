@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
@@ -7,12 +9,12 @@ import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 import 'package:rhyme_app/pages/practice/practice_session_page.dart';
 
-class PracticeHomeScreen extends StatelessWidget {
+class PracticeHomeScreen extends ConsumerWidget {
   const PracticeHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final s = AppScope.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(appStateProvider);
     final m = s.today;
 
     return SafeArea(
@@ -55,7 +57,7 @@ class PracticeHomeScreen extends StatelessWidget {
                               label: 'タイムアタック',
                               selected: m.mode == PracticeMode.timeAttack,
                               onTap: () {
-                                s.setMissionMode(PracticeMode.timeAttack);
+                                ref.read(appStateProvider).setMissionMode(PracticeMode.timeAttack);
                                 Navigator.pop(context);
                               },
                             ),
@@ -64,7 +66,7 @@ class PracticeHomeScreen extends StatelessWidget {
                               label: '行末固定',
                               selected: m.mode == PracticeMode.lineEndLock,
                               onTap: () {
-                                s.setMissionMode(PracticeMode.lineEndLock);
+                                ref.read(appStateProvider).setMissionMode(PracticeMode.lineEndLock);
                                 Navigator.pop(context);
                               },
                             ),

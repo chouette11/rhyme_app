@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
@@ -6,12 +8,12 @@ import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/pages/practice/practice_session_page.dart';
 import 'package:rhyme_app/pages/setting_page.dart';
 
-class TodayScreen extends StatelessWidget {
+class TodayScreen extends ConsumerWidget {
   const TodayScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final s = AppScope.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(appStateProvider);
     final m = s.today;
 
     return SafeArea(
@@ -60,14 +62,9 @@ class TodayScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text('厳密度', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.65))),
-                  AnimatedBuilder(
-                    animation: s,
-                    builder: (_, __) {
-                      return Slider(
-                        value: s.strictness,
-                        onChanged: s.setStrictness,
-                      );
-                    },
+                  Slider(
+                    value: s.strictness,
+                    onChanged: ref.read(appStateProvider).setStrictness,
                   ),
                   const SizedBox(height: 6),
                   AccentGradientButton(
@@ -119,25 +116,20 @@ class TodayScreen extends StatelessWidget {
             child: Glass(
               radius: 20,
               padding: const EdgeInsets.all(16),
-              child: AnimatedBuilder(
-                animation: s,
-                builder: (_, __) {
-                  final recents = s.recentSaved;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('直近の保存', style: Theme.of(context).textTheme.titleSmall),
-                      const SizedBox(height: 10),
-                      if (recents.isEmpty)
-                        Text('まだ保存がありません', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.65)))
-                      else
-                        ...recents.map((c) => Padding(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('直近の保存', style: Theme.of(context).textTheme.titleSmall),
+                  const SizedBox(height: 10),
+                  if (s.recentSaved.isEmpty)
+                    Text('まだ保存がありません',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.65)))
+                  else
+                    ...s.recentSaved.map((c) => Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: MiniSavedRow(card: c),
                         )),
-                    ],
-                  );
-                },
+                ],
               ),
             ),
           ),
