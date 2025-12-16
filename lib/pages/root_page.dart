@@ -35,6 +35,40 @@ final _router = GoRouter(
               path: '/practice',
               name: AppRoute.practice,
               builder: (context, state) => const PracticeHomeScreen(),
+              routes: [
+                GoRoute(
+                  path: 'session',
+                  name: AppRoute.practiceSession,
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is! Mission) {
+                      return const Scaffold(
+                        body: Center(child: Text('Invalid or missing mission data')),
+                      );
+                    }
+                    return PracticeSessionScreen(
+                      mission: extra,
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: 'result',
+                  name: AppRoute.practiceResult,
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is PracticeResult) {
+                      return PracticeResultScreen(result: extra);
+                    } else {
+                      // Fallback: show an error message or a placeholder
+                      return const Scaffold(
+                        body: Center(
+                          child: Text('Invalid or missing practice result.'),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -57,9 +91,15 @@ final _router = GoRouter(
     GoRoute(
       path: '/card/:cardId',
       name: AppRoute.cardDetail,
-      builder: (context, state) => CardDetailScreen(
-        cardId: state.pathParameters['cardId']!,
-      ),
+      builder: (context, state) {
+        final cardId = state.pathParameters['cardId'];
+        if (cardId == null) {
+          return const Scaffold(
+            body: Center(child: Text('Error: cardId is missing from the route.')),
+          );
+        }
+        return CardDetailScreen(cardId: cardId);
+      },
     ),
     GoRoute(
       path: '/practice-session',
