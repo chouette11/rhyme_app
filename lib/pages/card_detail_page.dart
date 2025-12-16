@@ -10,6 +10,23 @@ import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 import 'package:rhyme_app/pages/practice/practice_session_page.dart';
 
+// Provider for managing TextEditingController lifecycle
+final memoControllerProvider = Provider.autoDispose.family<TextEditingController, String>((ref, cardId) {
+  final controller = TextEditingController();
+  
+  // Initialize controller text from card memo
+  final appState = ref.read(appStateProvider);
+  final card = appState.deck.firstWhere((e) => e.id == cardId);
+  controller.text = card.memo;
+  
+  // Dispose controller when provider is disposed
+  ref.onDispose(() {
+    controller.dispose();
+  });
+  
+  return controller;
+});
+
 class CardDetailScreen extends ConsumerStatefulWidget {
   final String cardId;
   const CardDetailScreen({super.key, required this.cardId});
@@ -19,26 +36,12 @@ class CardDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _CardDetailScreenState extends ConsumerState<CardDetailScreen> {
-  late TextEditingController memoCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    memoCtrl = TextEditingController();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final s = ref.read(appStateProvider);
-    final card = s.deck.firstWhere((e) => e.id == widget.cardId);
-    memoCtrl.text = card.memo;
-  }
 
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(appStateProvider);
     final card = s.deck.firstWhere((e) => e.id == widget.cardId);
+    final memoCtrl = ref.watch(memoControllerProvider(widget.cardId));
 
     return Scaffold(
       body: SafeArea(
