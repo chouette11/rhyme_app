@@ -20,6 +20,7 @@ class CardDetailScreen extends ConsumerStatefulWidget {
 
 class _CardDetailScreenState extends ConsumerState<CardDetailScreen> {
   late TextEditingController memoCtrl;
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -30,9 +31,12 @@ class _CardDetailScreenState extends ConsumerState<CardDetailScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final s = ref.read(appStateProvider);
-    final card = s.deck.firstWhere((e) => e.id == widget.cardId);
-    memoCtrl.text = card.memo;
+    if (!_isInitialized) {
+      final s = ref.read(appStateProvider);
+      final card = s.deck.firstWhere((e) => e.id == widget.cardId);
+      memoCtrl.text = card.memo;
+      _isInitialized = true;
+    }
   }
 
   @override
