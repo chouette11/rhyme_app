@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/app_state.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
@@ -7,7 +8,7 @@ import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
-import 'package:rhyme_app/pages/practice/practice_session_page.dart';
+import 'package:rhyme_app/routes.dart';
 
 class PracticeHomeScreen extends ConsumerWidget {
   const PracticeHomeScreen({super.key});
@@ -83,47 +84,45 @@ class PracticeHomeScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: PracticeModeCard(
-              title: 'タイムアタック',
-              desc: '10個保存したら勝ち。反射で韻を出す。',
-              badge: '目標：${m.targetCount}個',
-              primary: true,
-              onStart: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => PracticeSessionScreen(
-                  mission: Mission(
-                    id: 'ta',
-                    rhymeKey: m.rhymeKey,
-                    mora: m.mora,
-                    targetCount: m.targetCount,
-                    mode: PracticeMode.timeAttack,
-                    approxAllowed: m.approxAllowed,
-                  ),
-                ),
-              )),
+          child: PracticeModeCard(
+            title: 'タイムアタック',
+            desc: '10個保存したら勝ち。反射で韻を出す。',
+            badge: '目標：${m.targetCount}個',
+            primary: true,
+            onStart: () => context.pushNamed(
+              AppRoute.practiceSession,
+              extra: Mission(
+                id: 'ta',
+                rhymeKey: m.rhymeKey,
+                mora: m.mora,
+                targetCount: m.targetCount,
+                mode: PracticeMode.timeAttack,
+                approxAllowed: m.approxAllowed,
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+        ),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
             child: PracticeModeCard(
-              title: '行末固定',
-              desc: '行末を決めて、1行ずつ仕上げる。',
-              badge: 'パンチライン練習',
-              primary: false,
-              onStart: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => PracticeSessionScreen(
-                  mission: Mission(
-                    id: 'le',
-                    rhymeKey: m.rhymeKey,
-                    mora: m.mora,
-                    targetCount: 8,
-                    mode: PracticeMode.lineEndLock,
-                    approxAllowed: m.approxAllowed,
-                  ),
-                ),
-              )),
+            title: '行末固定',
+            desc: '行末を決めて、1行ずつ仕上げる。',
+            badge: 'パンチライン練習',
+            primary: false,
+            onStart: () => context.pushNamed(
+              AppRoute.practiceSession,
+              extra: Mission(
+                id: 'le',
+                rhymeKey: m.rhymeKey,
+                mora: m.mora,
+                targetCount: 8,
+                mode: PracticeMode.lineEndLock,
+                approxAllowed: m.approxAllowed,
+              ),
             ),
           ),
+        ),
         ],
       ),
     );

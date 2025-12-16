@@ -1,8 +1,122 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/components/glass.dart';
+import 'package:rhyme_app/models/mission.dart';
+import 'package:rhyme_app/models/practice_result.dart';
+import 'package:rhyme_app/pages/card_detail_page.dart';
 import 'package:rhyme_app/pages/deck_page.dart';
 import 'package:rhyme_app/pages/practice/practice_home_page.dart';
+import 'package:rhyme_app/pages/practice/practice_result_page.dart';
+import 'package:rhyme_app/pages/practice/practice_session_page.dart';
+import 'package:rhyme_app/pages/setting_page.dart';
 import 'package:rhyme_app/pages/today_page.dart';
+import 'package:rhyme_app/routes.dart';
+
+final _router = GoRouter(
+  initialLocation: '/today',
+  routes: [
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => RootTabs(
+        navigationShell: navigationShell,
+      ),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/today',
+              name: AppRoute.today,
+              builder: (context, state) => const TodayScreen(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/practice',
+              name: AppRoute.practice,
+              builder: (context, state) => const PracticeHomeScreen(),
+              routes: [
+                GoRoute(
+                  path: 'session',
+                  name: AppRoute.practiceSession,
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is! Mission) {
+                      return const Scaffold(
+                        body: Center(child: Text('Invalid or missing mission data')),
+                      );
+                    }
+                    return PracticeSessionScreen(
+                      mission: extra,
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: 'result',
+                  name: AppRoute.practiceResult,
+                  builder: (context, state) {
+                    final extra = state.extra;
+                    if (extra is PracticeResult) {
+                      return PracticeResultScreen(result: extra);
+                    } else {
+                      // Fallback: show an error message or a placeholder
+                      return const Scaffold(
+                        body: Center(
+                          child: Text('Invalid or missing practice result.'),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/deck',
+              name: AppRoute.deck,
+              builder: (context, state) => const DeckScreen(),
+            ),
+          ],
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/settings',
+      name: AppRoute.settings,
+      builder: (context, state) => const SettingsScreen(),
+    ),
+    GoRoute(
+      path: '/card/:cardId',
+      name: AppRoute.cardDetail,
+      builder: (context, state) {
+        final cardId = state.pathParameters['cardId'];
+        if (cardId == null) {
+          return const Scaffold(
+            body: Center(child: Text('Error: cardId is missing from the route.')),
+          );
+        }
+        return CardDetailScreen(cardId: cardId);
+      },
+    ),
+    GoRoute(
+      path: '/practice-session',
+      name: AppRoute.practiceSession,
+      builder: (context, state) => PracticeSessionScreen(
+        mission: state.extra! as Mission,
+      ),
+    ),
+    GoRoute(
+      path: '/practice-result',
+      name: AppRoute.practiceResult,
+      builder: (context, state) => PracticeResultScreen(
+        result: state.extra! as PracticeResult,
+      ),
+    ),
+  ],
+);
 
 class RhymeApp extends StatelessWidget {
   const RhymeApp({super.key});
@@ -18,7 +132,7 @@ class RhymeApp extends StatelessWidget {
       surface: const Color(0xFF0B1024),
     );
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -33,7 +147,7 @@ class RhymeApp extends StatelessWidget {
           bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
       ),
-      home: const RootTabs(),
+      routerConfig: _router,
     );
   }
 }
@@ -42,25 +156,15 @@ class RhymeApp extends StatelessWidget {
    Root Tabs
 ========================= */
 
-class RootTabs extends StatefulWidget {
-  const RootTabs({super.key});
-  @override
-  State<RootTabs> createState() => _RootTabsState();
-}
+class RootTabs extends StatelessWidget {
+  final StatefulNavigationShell navigationShell;
 
-class _RootTabsState extends State<RootTabs> {
-  int index = 0;
+  const RootTabs({super.key, required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
-    const pages = [
-      TodayScreen(),
-      PracticeHomeScreen(),
-      DeckScreen(),
-    ];
-
     return Scaffold(
-      body: pages[index],
+      body: navigationShell,
       bottomNavigationBar: SafeArea(
         top: false,
         child: Padding(
@@ -72,8 +176,11 @@ class _RootTabsState extends State<RootTabs> {
               height: 64,
               backgroundColor: Colors.transparent,
               elevation: 0,
-              selectedIndex: index,
-              onDestinationSelected: (v) => setState(() => index = v),
+              selectedIndex: navigationShell.currentIndex,
+              onDestinationSelected: (v) => navigationShell.goBranch(
+                v,
+                initialLocation: v == navigationShell.currentIndex,
+              ),
               destinations: const [
                 NavigationDestination(icon: Icon(Icons.today_outlined), label: '今日'),
                 NavigationDestination(icon: Icon(Icons.flash_on_outlined), label: '練習'),

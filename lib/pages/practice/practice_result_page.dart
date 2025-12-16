@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rhyme_app/components/appbar.dart';
 import 'package:rhyme_app/components/buttons.dart';
 import 'package:rhyme_app/components/components.dart';
 import 'package:rhyme_app/components/glass.dart';
 import 'package:rhyme_app/models/practice_result.dart';
-import 'package:rhyme_app/pages/practice/practice_home_page.dart';
+import 'package:rhyme_app/routes.dart';
 
 class PracticeResultScreen extends StatefulWidget {
   final PracticeResult result;
@@ -31,7 +32,7 @@ class _PracticeResultScreenState extends State<PracticeResultScreen> {
             AppHeader(
               title: '結果',
               left: InkWell(
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(),
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   width: 36,
@@ -120,31 +121,29 @@ class _PracticeResultScreenState extends State<PracticeResultScreen> {
                 padding: const EdgeInsets.all(14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    AccentGradientButton(
-                      text: '次のミッション',
-                      onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SecondaryButton(
-                            text: 'デッキを見る',
-                            onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
-                          ),
+                children: [
+                  AccentGradientButton(
+                    text: '次のミッション',
+                    onPressed: () => context.goNamed(AppRoute.practice),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SecondaryButton(
+                          text: 'デッキを見る',
+                          onPressed: () => context.goNamed(AppRoute.deck),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: SecondaryButton(
-                            text: 'もう一回',
-                            onPressed: () => Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (_) => const PracticeHomeScreen()),
-                            ),
-                          ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: SecondaryButton(
+                          text: 'もう一回',
+                          onPressed: () => context.goNamed(AppRoute.practice),
                         ),
-                      ],
-                    )
+                      ),
+                    ],
+                  )
                   ],
                 ),
               ),
