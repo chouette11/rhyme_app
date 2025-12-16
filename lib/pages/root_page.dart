@@ -101,6 +101,20 @@ final _router = GoRouter(
         return CardDetailScreen(cardId: cardId);
       },
     ),
+    GoRoute(
+      path: '/practice-session',
+      name: AppRoute.practiceSession,
+      builder: (context, state) => PracticeSessionScreen(
+        mission: state.extra! as Mission,
+      ),
+    ),
+    GoRoute(
+      path: '/practice-result',
+      name: AppRoute.practiceResult,
+      builder: (context, state) => PracticeResultScreen(
+        result: state.extra! as PracticeResult,
+      ),
+    ),
   ],
 );
 
