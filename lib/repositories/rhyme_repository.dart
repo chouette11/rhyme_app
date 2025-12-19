@@ -1,21 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rhyme_app/data/datasources/rhyme_data_source.dart';
+import 'package:rhyme_app/data/firebase_config.dart';
 import 'package:rhyme_app/models/rhyme_card.dart';
 
 final inMemoryRhymeDataSourceProvider = Provider<InMemoryRhymeDataSource>((ref) {
   return InMemoryRhymeDataSource();
 });
 
+final firestoreProvider = Provider<FirebaseFirestore>((ref) {
+  return FirebaseFirestore.instance;
+});
+
 final rhymeRepositoryProvider = Provider<RhymeRepository>((ref) {
-  final dataSource = ref.read(inMemoryRhymeDataSourceProvider);
+  final dataSource = useFirestore
+      ? FirestoreRhymeDataSource(ref.read(firestoreProvider))
+      : ref.read(inMemoryRhymeDataSourceProvider);
   return RhymeRepositoryImpl(dataSource);
 });
 
 abstract class RhymeRepository {
-  List<RhymeCard> getDeck();
-  List<RhymeCard> getRecent();
-  void saveCard(RhymeCard card);
-  void updateCard(RhymeCard card);
+  Future<List<RhymeCard>> getDeck();
+  Future<List<RhymeCard>> getRecent();
+  Future<void> saveCard(RhymeCard card);
+  Future<void> updateCard(RhymeCard card);
 }
 
 class RhymeRepositoryImpl implements RhymeRepository {
@@ -24,14 +32,14 @@ class RhymeRepositoryImpl implements RhymeRepository {
   RhymeRepositoryImpl(this._dataSource);
 
   @override
-  List<RhymeCard> getDeck() => _dataSource.fetchDeck();
+  Future<List<RhymeCard>> getDeck() => _dataSource.fetchDeck();
 
   @override
-  List<RhymeCard> getRecent() => _dataSource.fetchRecent();
+  Future<List<RhymeCard>> getRecent() => _dataSource.fetchRecent();
 
   @override
-  void saveCard(RhymeCard card) => _dataSource.addCard(card);
+  Future<void> saveCard(RhymeCard card) => _dataSource.addCard(card);
 
   @override
-  void updateCard(RhymeCard card) => _dataSource.updateCard(card);
+  Future<void> updateCard(RhymeCard card) => _dataSource.updateCard(card);
 }

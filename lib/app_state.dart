@@ -20,33 +20,50 @@ class AppState extends ChangeNotifier {
   AppState(Ref ref)
       : _missionRepository = ref.read(missionRepositoryProvider),
         _rhymeRepository = ref.read(rhymeRepositoryProvider) {
-    today = _missionRepository.getTodayMission();
-    strictness = _missionRepository.getStrictness();
-    deck = _rhymeRepository.getDeck();
-    _recent.addAll(_rhymeRepository.getRecent());
+    today = const Mission(
+      id: 'today',
+      rhymeKey: '-ou',
+      mora: 3,
+      targetCount: 10,
+      mode: PracticeMode.timeAttack,
+      approxAllowed: true,
+    );
+    strictness = 0.65;
+    deck = const [];
+    _initialize();
   }
 
   List<RhymeCard> get recentSaved => List.unmodifiable(_recent.take(3));
 
-  void setStrictness(double v) {
-    strictness = _missionRepository.updateStrictness(v);
+  Future<void> _initialize() async {
+    today = await _missionRepository.getTodayMission();
+    strictness = await _missionRepository.getStrictness();
+    deck = await _rhymeRepository.getDeck();
+    _recent
+      ..clear()
+      ..addAll(await _rhymeRepository.getRecent());
     notifyListeners();
   }
 
-  void setMissionMode(PracticeMode mode) {
-    today = _missionRepository.updateMode(mode);
+  Future<void> setStrictness(double v) async {
+    strictness = await _missionRepository.updateStrictness(v);
     notifyListeners();
   }
 
-  void saveToDeck(RhymeCard card) {
-    _rhymeRepository.saveCard(card);
+  Future<void> setMissionMode(PracticeMode mode) async {
+    today = await _missionRepository.updateMode(mode);
+    notifyListeners();
+  }
+
+  Future<void> saveToDeck(RhymeCard card) async {
+    await _rhymeRepository.saveCard(card);
     deck = [card, ...deck];
-    _refreshRecent();
+    await _refreshRecent();
     notifyListeners();
   }
 
-  void updateCard(RhymeCard updated) {
-    _rhymeRepository.updateCard(updated);
+  Future<void> updateCard(RhymeCard updated) async {
+    await _rhymeRepository.updateCard(updated);
     final index = deck.indexWhere((c) => c.id == updated.id);
     if (index != -1) {
       final updatedDeck = List<RhymeCard>.from(deck);
@@ -54,15 +71,15 @@ class AppState extends ChangeNotifier {
       deck = updatedDeck;
     } else {
       // Card not in local deck, refresh from repository to maintain consistency
-      deck = _rhymeRepository.getDeck();
+      deck = await _rhymeRepository.getDeck();
     }
-    _refreshRecent();
+    await _refreshRecent();
     notifyListeners();
   }
 
-  void _refreshRecent() {
+  Future<void> _refreshRecent() async {
     _recent
       ..clear()
-      ..addAll(_rhymeRepository.getRecent());
+      ..addAll(await _rhymeRepository.getRecent());
   }
 }
