@@ -3,8 +3,13 @@ import 'package:rhyme_app/data/datasources/mission_data_source.dart';
 import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 
+final inMemoryMissionDataSourceProvider = Provider<InMemoryMissionDataSource>((ref) {
+  return InMemoryMissionDataSource();
+});
+
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
-  return MissionRepositoryImpl(InMemoryMissionDataSource());
+  final dataSource = ref.read(inMemoryMissionDataSourceProvider);
+  return MissionRepositoryImpl(dataSource);
 });
 
 abstract class MissionRepository {
