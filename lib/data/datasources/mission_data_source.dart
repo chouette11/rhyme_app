@@ -28,7 +28,7 @@ class InMemoryMissionDataSource implements MissionDataSource {
 
   @override
   double saveStrictness(double value) {
-    _strictness = value.clamp(0, 1);
+    _strictness = value.clamp(0.0, 1.0);
     return _strictness;
   }
 
