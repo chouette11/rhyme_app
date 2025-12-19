@@ -4,7 +4,7 @@ import 'package:rhyme_app/models/practice_mode.dart';
 abstract class MissionDataSource {
   Mission loadTodayMission();
   double loadStrictness();
-  void saveStrictness(double value);
+  double saveStrictness(double value);
   void saveMission(Mission mission);
 }
 
@@ -27,7 +27,10 @@ class InMemoryMissionDataSource implements MissionDataSource {
   double loadStrictness() => _strictness;
 
   @override
-  void saveStrictness(double value) => _strictness = value.clamp(0, 1);
+  double saveStrictness(double value) {
+    _strictness = value.clamp(0.0, 1.0);
+    return _strictness;
+  }
 
   @override
   void saveMission(Mission mission) => _today = mission;

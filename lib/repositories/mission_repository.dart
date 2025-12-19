@@ -47,8 +47,6 @@ class MissionRepositoryImpl implements MissionRepository {
 
   @override
   double updateStrictness(double value) {
-    final clamped = value.clamp(0.0, 1.0);
-    _dataSource.saveStrictness(clamped);
-    return clamped;
+    return _dataSource.saveStrictness(value);
   }
 }
