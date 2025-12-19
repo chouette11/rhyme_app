@@ -83,8 +83,15 @@ class _AddRhymeModalState extends ConsumerState<AddRhymeModal> {
                 mora: mora,
                 rhymeKey: rhymeKey,
                 tags: List.unmodifiable(tags),
-              ));
-              Navigator.pop(context);
+              )).then((_) {
+                if (!mounted) return;
+                Navigator.pop(context);
+              }).catchError((e) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('保存に失敗しました: ${e.toString()}')),
+                );
+              });
             },
           ),
           const SizedBox(height: 10),

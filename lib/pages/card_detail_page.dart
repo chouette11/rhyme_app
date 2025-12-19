@@ -91,16 +91,58 @@ class CardDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 10),
                   Wrap(spacing: 8, children: [
                     _statusPill(context, '温存', card.status == CardStatus.stock, () {
-                      card.status = CardStatus.stock;
-                      ref.read(appStateProvider).updateCard(card);
+                      final updatedCard = RhymeCard(
+                        id: card.id,
+                        text: card.text,
+                        reading: card.reading,
+                        mora: card.mora,
+                        rhymeKey: card.rhymeKey,
+                        tags: card.tags,
+                        status: CardStatus.stock,
+                        memo: card.memo,
+                      );
+                      ref.read(appStateProvider).updateCard(updatedCard).catchError((e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('状態の更新に失敗しました: ${e.toString()}')),
+                        );
+                      });
                     }),
                     _statusPill(context, '使用済み', card.status == CardStatus.used, () {
-                      card.status = CardStatus.used;
-                      ref.read(appStateProvider).updateCard(card);
+                      final updatedCard = RhymeCard(
+                        id: card.id,
+                        text: card.text,
+                        reading: card.reading,
+                        mora: card.mora,
+                        rhymeKey: card.rhymeKey,
+                        tags: card.tags,
+                        status: CardStatus.used,
+                        memo: card.memo,
+                      );
+                      ref.read(appStateProvider).updateCard(updatedCard).catchError((e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('状態の更新に失敗しました: ${e.toString()}')),
+                        );
+                      });
                     }),
                     _statusPill(context, 'ボツ', card.status == CardStatus.trash, () {
-                      card.status = CardStatus.trash;
-                      ref.read(appStateProvider).updateCard(card);
+                      final updatedCard = RhymeCard(
+                        id: card.id,
+                        text: card.text,
+                        reading: card.reading,
+                        mora: card.mora,
+                        rhymeKey: card.rhymeKey,
+                        tags: card.tags,
+                        status: CardStatus.trash,
+                        memo: card.memo,
+                      );
+                      ref.read(appStateProvider).updateCard(updatedCard).catchError((e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('状態の更新に失敗しました: ${e.toString()}')),
+                        );
+                      });
                     }),
                   ]),
                 ]),
@@ -120,8 +162,22 @@ class CardDetailScreen extends ConsumerWidget {
                   TextField(
                     controller: memoCtrl,
                     onChanged: (v) {
-                      card.memo = v;
-                      ref.read(appStateProvider).updateCard(card);
+                      final updatedCard = RhymeCard(
+                        id: card.id,
+                        text: card.text,
+                        reading: card.reading,
+                        mora: card.mora,
+                        rhymeKey: card.rhymeKey,
+                        tags: card.tags,
+                        status: card.status,
+                        memo: v,
+                      );
+                      ref.read(appStateProvider).updateCard(updatedCard).catchError((e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('メモの更新に失敗しました: ${e.toString()}')),
+                        );
+                      });
                     },
                     maxLines: 4,
                     decoration: InputDecoration(
