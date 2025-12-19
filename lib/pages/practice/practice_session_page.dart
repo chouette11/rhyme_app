@@ -49,11 +49,16 @@ class _PracticeSessionScreenState extends ConsumerState<PracticeSessionScreen> {
       rhymeKey: c.rhymeKey,
       tags: c.tags,
     );
-    ref.read(appStateProvider).saveToDeck(card);
-    setState(() {
-      saved.insert(0, card);
+    ref.read(appStateProvider).saveToDeck(card).then((_) {
+      setState(() {
+        saved.insert(0, card);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('デッキに保存しました')));
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('保存に失敗しました: ${e.toString()}')),
+      );
     });
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('デッキに保存しました')));
   }
 
   void _end() {
