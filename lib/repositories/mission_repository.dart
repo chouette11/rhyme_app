@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rhyme_app/data/datasources/mission_data_source.dart';
 import 'package:rhyme_app/data/firebase_config.dart';
@@ -7,10 +6,6 @@ import 'package:rhyme_app/models/practice_mode.dart';
 
 final inMemoryMissionDataSourceProvider = Provider<InMemoryMissionDataSource>((ref) {
   return InMemoryMissionDataSource();
-});
-
-final firestoreProvider = Provider<FirebaseFirestore>((ref) {
-  return FirebaseFirestore.instance;
 });
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
