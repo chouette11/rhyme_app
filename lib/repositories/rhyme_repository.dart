@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rhyme_app/data/datasources/rhyme_data_source.dart';
 import 'package:rhyme_app/data/firebase_config.dart';
@@ -7,6 +6,7 @@ import 'package:rhyme_app/models/rhyme_card.dart';
 final inMemoryRhymeDataSourceProvider = Provider<InMemoryRhymeDataSource>((ref) {
   return InMemoryRhymeDataSource();
 });
+
 
 final firestoreProvider = Provider<FirebaseFirestore>((ref) {
   return FirebaseFirestore.instance;
