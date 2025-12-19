@@ -53,14 +53,7 @@ class FirestoreMissionDataSource implements MissionDataSource {
     final snapshot = await _missionDoc.get();
     final data = snapshot.data();
     if (data == null) {
-      return const Mission(
-        id: 'today',
-        rhymeKey: '-ou',
-        mora: 3,
-        targetCount: 10,
-        mode: PracticeMode.timeAttack,
-        approxAllowed: true,
-      );
+      return Mission.defaultMission;
     }
     return Mission.fromMap(id: snapshot.id, data: data);
   }

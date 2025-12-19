@@ -16,18 +16,14 @@ class AppState extends ChangeNotifier {
   late double strictness;
   late List<RhymeCard> deck;
   final List<RhymeCard> _recent = [];
+  
+  bool isInitializing = true;
+  String? initializationError;
 
   AppState(Ref ref)
       : _missionRepository = ref.read(missionRepositoryProvider),
         _rhymeRepository = ref.read(rhymeRepositoryProvider) {
-    today = const Mission(
-      id: 'today',
-      rhymeKey: '-ou',
-      mora: 3,
-      targetCount: 10,
-      mode: PracticeMode.timeAttack,
-      approxAllowed: true,
-    );
+    today = Mission.defaultMission;
     strictness = 0.65;
     deck = const [];
     _initialize();
@@ -36,13 +32,21 @@ class AppState extends ChangeNotifier {
   List<RhymeCard> get recentSaved => List.unmodifiable(_recent.take(3));
 
   Future<void> _initialize() async {
-    today = await _missionRepository.getTodayMission();
-    strictness = await _missionRepository.getStrictness();
-    deck = await _rhymeRepository.getDeck();
-    _recent
-      ..clear()
-      ..addAll(await _rhymeRepository.getRecent());
-    notifyListeners();
+    try {
+      today = await _missionRepository.getTodayMission();
+      strictness = await _missionRepository.getStrictness();
+      deck = await _rhymeRepository.getDeck();
+      _recent
+        ..clear()
+        ..addAll(await _rhymeRepository.getRecent());
+      isInitializing = false;
+      initializationError = null;
+    } catch (e) {
+      isInitializing = false;
+      initializationError = e.toString();
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future<void> setStrictness(double v) async {

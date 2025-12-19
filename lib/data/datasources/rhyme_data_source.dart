@@ -56,20 +56,36 @@ class FirestoreRhymeDataSource implements RhymeDataSource {
 
   @override
   Future<List<RhymeCard>> fetchDeck() async {
-    final snapshot = await _collection.orderBy('createdAt', descending: true).get();
-    return snapshot.docs
-        .map((doc) => RhymeCard.fromMap(id: doc.id, data: doc.data()))
-        .toList(growable: false);
+    return _fetchCardsWithIndexHandling(
+      _collection.orderBy('createdAt', descending: true),
+    );
   }
 
   @override
   Future<List<RhymeCard>> fetchRecent() async {
-    final snapshot = await _collection.orderBy('updatedAt', descending: true).limit(20).get();
-    return snapshot.docs
-        .map((doc) => RhymeCard.fromMap(id: doc.id, data: doc.data()))
-        .toList(growable: false);
+    return _fetchCardsWithIndexHandling(
+      _collection.orderBy('updatedAt', descending: true).limit(20),
+    );
   }
 
+  Future<List<RhymeCard>> _fetchCardsWithIndexHandling(
+    Query<Map<String, dynamic>> query,
+  ) async {
+    try {
+      final snapshot = await query.get();
+      return snapshot.docs
+          .map((doc) => RhymeCard.fromMap(id: doc.id, data: doc.data()))
+          .toList(growable: false);
+    } on FirebaseException catch (e) {
+      if (e.code == 'failed-precondition') {
+        // Likely missing Firestore index for the requested orderBy clause.
+        // Returning an empty list allows the app to continue running while
+        // the index is being created.
+        return const <RhymeCard>[];
+      }
+      rethrow;
+    }
+  }
   @override
   Future<void> addCard(RhymeCard card) async {
     final data = {
