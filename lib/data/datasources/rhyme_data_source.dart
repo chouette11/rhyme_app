@@ -38,5 +38,9 @@ class InMemoryRhymeDataSource implements RhymeDataSource {
     if (index != -1) {
       _deck[index] = card;
     }
+    final recentIndex = _recent.indexWhere((c) => c.id == card.id);
+    if (recentIndex != -1) {
+      _recent[recentIndex] = card;
+    }
   }
 }
