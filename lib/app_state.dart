@@ -29,7 +29,7 @@ class AppState extends ChangeNotifier {
   List<RhymeCard> get recentSaved => List.unmodifiable(_recent.take(3));
 
   void setStrictness(double v) {
-    strictness = _missionRepository.updateStrictness(v.clamp(0, 1));
+    strictness = _missionRepository.updateStrictness(v);
     notifyListeners();
   }
 
