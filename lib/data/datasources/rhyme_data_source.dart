@@ -77,7 +77,12 @@ class FirestoreRhymeDataSource implements RhymeDataSource {
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     };
-    await _collection.doc(card.id).set(data);
+    final docRef = _collection.doc(card.id);
+    final existing = await docRef.get();
+    if (existing.exists) {
+      throw StateError('A rhyme card with id ${card.id} already exists.');
+    }
+    await docRef.set(data, SetOptions(merge: false));
   }
 
   @override
