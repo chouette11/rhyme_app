@@ -95,6 +95,7 @@ class CardDetailScreen extends ConsumerWidget {
                       card.status = CardStatus.stock;
                       ref.read(appStateProvider).updateCard(card).catchError((e) {
                         card.status = previousStatus;
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('状態の更新に失敗しました: ${e.toString()}')),
                         );
@@ -105,6 +106,7 @@ class CardDetailScreen extends ConsumerWidget {
                       card.status = CardStatus.used;
                       ref.read(appStateProvider).updateCard(card).catchError((e) {
                         card.status = previousStatus;
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('状態の更新に失敗しました: ${e.toString()}')),
                         );
@@ -115,6 +117,7 @@ class CardDetailScreen extends ConsumerWidget {
                       card.status = CardStatus.trash;
                       ref.read(appStateProvider).updateCard(card).catchError((e) {
                         card.status = previousStatus;
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('状態の更新に失敗しました: ${e.toString()}')),
                         );
@@ -143,6 +146,7 @@ class CardDetailScreen extends ConsumerWidget {
                       ref.read(appStateProvider).updateCard(card).catchError((e) {
                         card.memo = previousMemo;
                         memoCtrl.text = previousMemo;
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('メモの更新に失敗しました: ${e.toString()}')),
                         );

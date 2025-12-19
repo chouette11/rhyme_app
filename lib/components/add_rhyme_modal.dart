@@ -84,8 +84,10 @@ class _AddRhymeModalState extends ConsumerState<AddRhymeModal> {
                 rhymeKey: rhymeKey,
                 tags: List.unmodifiable(tags),
               )).then((_) {
+                if (!mounted) return;
                 Navigator.pop(context);
               }).catchError((e) {
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('保存に失敗しました: ${e.toString()}')),
                 );

@@ -66,6 +66,7 @@ class TodayScreen extends ConsumerWidget {
                     value: s.strictness,
                     onChanged: (value) {
                       ref.read(appStateProvider).setStrictness(value).catchError((e) {
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('設定の保存に失敗しました: ${e.toString()}')),
                         );
