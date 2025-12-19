@@ -64,7 +64,14 @@ class TodayScreen extends ConsumerWidget {
                   Text('厳密度', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.65))),
                   Slider(
                     value: s.strictness,
-                    onChanged: ref.read(appStateProvider).setStrictness,
+                    onChanged: (value) {
+                      ref.read(appStateProvider).setStrictness(value).catchError((e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('設定の保存に失敗しました: ${e.toString()}')),
+                        );
+                      });
+                    },
                   ),
                   const SizedBox(height: 6),
                   AccentGradientButton(

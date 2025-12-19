@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rhyme_app/data/datasources/mission_data_source.dart';
+import 'package:rhyme_app/data/firebase_config.dart';
 import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 
@@ -8,15 +9,17 @@ final inMemoryMissionDataSourceProvider = Provider<InMemoryMissionDataSource>((r
 });
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
-  final dataSource = ref.read(inMemoryMissionDataSourceProvider);
+  final dataSource = useFirestore
+      ? FirestoreMissionDataSource(ref.read(firestoreProvider))
+      : ref.read(inMemoryMissionDataSourceProvider);
   return MissionRepositoryImpl(dataSource);
 });
 
 abstract class MissionRepository {
-  Mission getTodayMission();
-  Mission updateMode(PracticeMode mode);
-  double getStrictness();
-  double updateStrictness(double value);
+  Future<Mission> getTodayMission();
+  Future<Mission> updateMode(PracticeMode mode);
+  Future<double> getStrictness();
+  Future<double> updateStrictness(double value);
 }
 
 class MissionRepositoryImpl implements MissionRepository {
@@ -25,11 +28,11 @@ class MissionRepositoryImpl implements MissionRepository {
   MissionRepositoryImpl(this._dataSource);
 
   @override
-  Mission getTodayMission() => _dataSource.loadTodayMission();
+  Future<Mission> getTodayMission() => _dataSource.loadTodayMission();
 
   @override
-  Mission updateMode(PracticeMode mode) {
-    final current = _dataSource.loadTodayMission();
+  Future<Mission> updateMode(PracticeMode mode) async {
+    final current = await _dataSource.loadTodayMission();
     final updated = Mission(
       id: current.id,
       rhymeKey: current.rhymeKey,
@@ -38,15 +41,13 @@ class MissionRepositoryImpl implements MissionRepository {
       mode: mode,
       approxAllowed: current.approxAllowed,
     );
-    _dataSource.saveMission(updated);
+    await _dataSource.saveMission(updated);
     return updated;
   }
 
   @override
-  double getStrictness() => _dataSource.loadStrictness();
+  Future<double> getStrictness() => _dataSource.loadStrictness();
 
   @override
-  double updateStrictness(double value) {
-    return _dataSource.saveStrictness(value);
-  }
+  Future<double> updateStrictness(double value) => _dataSource.saveStrictness(value);
 }

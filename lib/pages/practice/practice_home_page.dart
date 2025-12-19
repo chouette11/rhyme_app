@@ -58,7 +58,12 @@ class PracticeHomeScreen extends ConsumerWidget {
                               label: 'タイムアタック',
                               selected: m.mode == PracticeMode.timeAttack,
                               onTap: () {
-                                ref.read(appStateProvider).setMissionMode(PracticeMode.timeAttack);
+                                ref.read(appStateProvider).setMissionMode(PracticeMode.timeAttack).catchError((e) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('モードの変更に失敗しました: ${e.toString()}')),
+                                  );
+                                });
                                 Navigator.pop(context);
                               },
                             ),
@@ -67,7 +72,12 @@ class PracticeHomeScreen extends ConsumerWidget {
                               label: '行末固定',
                               selected: m.mode == PracticeMode.lineEndLock,
                               onTap: () {
-                                ref.read(appStateProvider).setMissionMode(PracticeMode.lineEndLock);
+                                ref.read(appStateProvider).setMissionMode(PracticeMode.lineEndLock).catchError((e) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('モードの変更に失敗しました: ${e.toString()}')),
+                                  );
+                                });
                                 Navigator.pop(context);
                               },
                             ),
