@@ -1,62 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rhyme_app/models/card_status.dart';
 import 'package:rhyme_app/models/mission.dart';
 import 'package:rhyme_app/models/practice_mode.dart';
 import 'package:rhyme_app/models/rhyme_card.dart';
+import 'package:rhyme_app/repositories/mission_repository.dart';
+import 'package:rhyme_app/repositories/rhyme_repository.dart';
 
-final appStateProvider = ChangeNotifierProvider<AppState>((ref) => AppState());
+final appStateProvider = ChangeNotifierProvider<AppState>((ref) => AppState(ref));
 
 class AppState extends ChangeNotifier {
-  Mission today = const Mission(
-    id: 'm1',
-    rhymeKey: '-ou',
-    mora: 3,
-    targetCount: 10,
-    mode: PracticeMode.timeAttack,
-    approxAllowed: true,
-  );
+  final MissionRepository _missionRepository;
+  final RhymeRepository _rhymeRepository;
 
-  double strictness = 0.65; // 0:ゆる〜1:ガチ
-  final List<RhymeCard> deck = [
-    RhymeCard(id: 'c1', text: '東京', reading: 'とうきょう', mora: 4, rhymeKey: '-ou', tags: ['街', '夜']),
-    RhymeCard(id: 'c2', text: '状況', reading: 'じょうきょう', mora: 4, rhymeKey: '-ou', tags: ['バトル'], status: CardStatus.used),
-    RhymeCard(id: 'c3', text: '強行', reading: 'きょうこう', mora: 4, rhymeKey: '-ou', tags: ['攻']),
-  ];
-
+  late Mission today;
+  late double strictness;
+  late List<RhymeCard> deck;
   final List<RhymeCard> _recent = [];
+
+  AppState(Ref ref)
+      : _missionRepository = ref.read(missionRepositoryProvider),
+        _rhymeRepository = ref.read(rhymeRepositoryProvider) {
+    today = _missionRepository.getTodayMission();
+    strictness = _missionRepository.getStrictness();
+    deck = _rhymeRepository.getDeck();
+    _recent.addAll(_rhymeRepository.getRecent());
+  }
 
   List<RhymeCard> get recentSaved => List.unmodifiable(_recent.take(3));
 
   void setStrictness(double v) {
-    strictness = v.clamp(0, 1);
+    strictness = _missionRepository.updateStrictness(v);
     notifyListeners();
   }
 
   void setMissionMode(PracticeMode mode) {
-    today = Mission(
-      id: today.id,
-      rhymeKey: today.rhymeKey,
-      mora: today.mora,
-      targetCount: today.targetCount,
-      mode: mode,
-      approxAllowed: today.approxAllowed,
-    );
+    today = _missionRepository.updateMode(mode);
     notifyListeners();
   }
 
   void saveToDeck(RhymeCard card) {
-    deck.insert(0, card);
-    _recent.insert(0, card);
-    if (_recent.length > 20) _recent.removeLast();
+    _rhymeRepository.saveCard(card);
+    deck = [card, ...deck];
+    _refreshRecent();
     notifyListeners();
   }
 
   void updateCard(RhymeCard updated) {
-    final i = deck.indexWhere((e) => e.id == updated.id);
-    if (i >= 0) {
-      deck[i] = updated;
-      notifyListeners();
+    _rhymeRepository.updateCard(updated);
+    final index = deck.indexWhere((c) => c.id == updated.id);
+    if (index != -1) {
+      final updatedDeck = List<RhymeCard>.from(deck);
+      updatedDeck[index] = updated;
+      deck = updatedDeck;
+    } else {
+      // Card not in local deck, refresh from repository to maintain consistency
+      deck = _rhymeRepository.getDeck();
     }
+    _refreshRecent();
+    notifyListeners();
+  }
+
+  void _refreshRecent() {
+    _recent
+      ..clear()
+      ..addAll(_rhymeRepository.getRecent());
   }
 }
