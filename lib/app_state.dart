@@ -49,8 +49,12 @@ class AppState extends ChangeNotifier {
     _rhymeRepository.updateCard(updated);
     final index = deck.indexWhere((c) => c.id == updated.id);
     if (index != -1) {
-      deck = [...deck];
-      deck[index] = updated;
+      final updatedDeck = List<RhymeCard>.from(deck);
+      updatedDeck[index] = updated;
+      deck = updatedDeck;
+    } else {
+      // Card not in local deck, refresh from repository to maintain consistency
+      deck = _rhymeRepository.getDeck();
     }
     _refreshRecent();
     notifyListeners();
