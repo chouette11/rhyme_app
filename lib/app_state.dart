@@ -40,14 +40,18 @@ class AppState extends ChangeNotifier {
 
   void saveToDeck(RhymeCard card) {
     _rhymeRepository.saveCard(card);
-    deck = _rhymeRepository.getDeck();
+    deck = [card, ...deck];
     _refreshRecent();
     notifyListeners();
   }
 
   void updateCard(RhymeCard updated) {
     _rhymeRepository.updateCard(updated);
-    deck = _rhymeRepository.getDeck();
+    final index = deck.indexWhere((c) => c.id == updated.id);
+    if (index != -1) {
+      deck = [...deck];
+      deck[index] = updated;
+    }
     _refreshRecent();
     notifyListeners();
   }
