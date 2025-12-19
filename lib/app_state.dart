@@ -20,14 +20,7 @@ class AppState extends ChangeNotifier {
   AppState(Ref ref)
       : _missionRepository = ref.read(missionRepositoryProvider),
         _rhymeRepository = ref.read(rhymeRepositoryProvider) {
-    today = const Mission(
-      id: 'today',
-      rhymeKey: '-ou',
-      mora: 3,
-      targetCount: 10,
-      mode: PracticeMode.timeAttack,
-      approxAllowed: true,
-    );
+    today = Mission.defaultMission;
     strictness = 0.65;
     deck = const [];
     _initialize();
