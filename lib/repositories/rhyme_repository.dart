@@ -2,8 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rhyme_app/data/datasources/rhyme_data_source.dart';
 import 'package:rhyme_app/models/rhyme_card.dart';
 
+final inMemoryRhymeDataSourceProvider = Provider<InMemoryRhymeDataSource>((ref) {
+  return InMemoryRhymeDataSource();
+});
+
 final rhymeRepositoryProvider = Provider<RhymeRepository>((ref) {
-  return RhymeRepositoryImpl(InMemoryRhymeDataSource());
+  final dataSource = ref.read(inMemoryRhymeDataSourceProvider);
+  return RhymeRepositoryImpl(dataSource);
 });
 
 abstract class RhymeRepository {
